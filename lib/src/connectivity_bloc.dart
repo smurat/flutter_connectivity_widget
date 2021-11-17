@@ -9,27 +9,28 @@ import 'event.dart';
 /// the [ConnectivityUtils] if there is a connection to the internet
 class ConnectivityBloc {
   /// Connectivity status Stream
-  BehaviorSubject<bool> connectivityStatusSubject = BehaviorSubject<bool>();
+  BehaviorSubject<bool>? connectivityStatusSubject = BehaviorSubject<bool>();
 
-  Sink<bool> get connectivityStatusSink => connectivityStatusSubject.sink;
+  Sink<bool>? get connectivityStatusSink => connectivityStatusSubject?.sink;
 
-  Stream<bool> get connectivityStatusStream => connectivityStatusSubject.stream;
+  Stream<bool>? get connectivityStatusStream =>
+      connectivityStatusSubject?.stream;
 
   /// Check the network status
-  PublishSubject<Event> _checkInternetConnectivitySubject =
+  PublishSubject<Event>? _checkInternetConnectivitySubject =
       PublishSubject<Event>();
 
-  Sink<Event> get checkInternetConnectivitySink =>
-      _checkInternetConnectivitySubject.sink;
+  Sink<Event>? get checkInternetConnectivitySink =>
+      _checkInternetConnectivitySubject?.sink;
 
   ConnectivityBloc._() {
     /// Listens for the value from [ConnectivityUtils] and sends a new event
     /// to the [ConnectivityWidget]
     ConnectivityUtils.instance?.isPhoneConnectedStream.listen((value) {
-      connectivityStatusSink.add(value);
+      connectivityStatusSink?.add(value);
     });
 
-    _checkInternetConnectivitySubject.stream.listen((_) =>
+    _checkInternetConnectivitySubject?.stream.listen((_) =>
         ConnectivityUtils.instance?.getConnectivityStatusSink.add(Event()));
   }
 
@@ -40,7 +41,7 @@ class ConnectivityBloc {
   }
 
   void dispose() {
-    _checkInternetConnectivitySubject.close();
-    connectivityStatusSubject.close();
+    _checkInternetConnectivitySubject?.close();
+    connectivityStatusSubject?.close();
   }
 }

@@ -108,16 +108,17 @@ class ConnectivityWidgetState extends State<ConnectivityWidget>
         duration: const Duration(milliseconds: 500), vsync: this);
 
     if (dontAnimate == null &&
-        !(ConnectivityBloc.instance.connectivityStatusSubject.value)) {
+        !(ConnectivityBloc.instance.connectivityStatusSubject?.value??true)) {
       this.animationController?.value = 1.0;
     }
 
     disposable?.add(
-        ConnectivityBloc.instance.connectivityStatusStream.listen((status) {
+        ConnectivityBloc.instance.connectivityStatusStream?.listen((status) {
       /// At the start, if we have a status set, we must consider that we came from another screen with that status
       if (dontAnimate == null) {
         this.dontAnimate = true;
-        if (!(ConnectivityBloc.instance.connectivityStatusSubject.value)) {
+        if (!(ConnectivityBloc.instance.connectivityStatusSubject?.value ??
+            true)) {
           this.animationController?.value = 1.0;
         }
         return;
@@ -128,7 +129,7 @@ class ConnectivityWidgetState extends State<ConnectivityWidget>
       } else {
         this.animationController?.reverse();
         widget.onlineCallback!();
-        ;
+        
       }
       this.dontAnimate = true;
     }));
