@@ -54,7 +54,7 @@ class ConnectivityWidget extends StatefulWidget {
   /// Builder method for the child widget.
   ///
   /// Provides a [iSOnline] parameter and a [context] to build the child
-  final ConnectivityBuilder builder;
+  final ConnectivityBuilder? builder;
 
   /// Callback for when the device is online
   ///
@@ -73,18 +73,18 @@ class ConnectivityWidget extends StatefulWidget {
   /// OfflineBanner to be shown at the bottom of the widget
   ///
   /// If none is provided, the [_NoConnectivityBanner] is shown
-  final Widget offlineBanner;
+  final Widget? offlineBanner;
 
   /// Flag to show or hide the [offlineBanner]
-  final bool showOfflineBanner;
+  final bool? showOfflineBanner;
 
   ConnectivityWidget(
       {this.builder,
-      this.onlineCallback,
-      this.offlineCallback,
+      required this.onlineCallback,
+      required this.offlineCallback,
       this.showOfflineBanner = true,
       this.offlineBanner,
-      Key key})
+      Key? key})
       : super(key: key);
 
   @override
@@ -93,11 +93,11 @@ class ConnectivityWidget extends StatefulWidget {
 
 class ConnectivityWidgetState extends State<ConnectivityWidget>
     with SingleTickerProviderStateMixin {
-  bool dontAnimate;
+  bool? dontAnimate;
 
-  AnimationController animationController;
+  AnimationController? animationController;
 
-  StreamDisposable disposable = StreamDisposable();
+  StreamDisposable? disposable = StreamDisposable();
 
   @override
   @mustCallSuper
@@ -108,30 +108,26 @@ class ConnectivityWidgetState extends State<ConnectivityWidget>
         duration: const Duration(milliseconds: 500), vsync: this);
 
     if (dontAnimate == null &&
-        !(ConnectivityBloc
-                .instance.connectivityStatusSubject.valueWrapper?.value ??
-            true)) {
-      this.animationController.value = 1.0;
+        !(ConnectivityBloc.instance.connectivityStatusSubject.value)) {
+      this.animationController?.value = 1.0;
     }
 
-    disposable.add(
+    disposable?.add(
         ConnectivityBloc.instance.connectivityStatusStream.listen((status) {
       /// At the start, if we have a status set, we must consider that we came from another screen with that status
       if (dontAnimate == null) {
         this.dontAnimate = true;
-        if (!(ConnectivityBloc
-                .instance.connectivityStatusSubject.valueWrapper?.value ??
-            true)) {
-          this.animationController.value = 1.0;
+        if (!(ConnectivityBloc.instance.connectivityStatusSubject.value)) {
+          this.animationController?.value = 1.0;
         }
         return;
       }
       if (!status) {
-        this.animationController.forward();
-        if (widget.offlineCallback != null) widget.offlineCallback();
+        this.animationController?.forward();
+        widget.offlineCallback();
       } else {
-        this.animationController.reverse();
-        if (widget.onlineCallback != null) widget.onlineCallback();
+        this.animationController?.reverse();
+        widget.onlineCallback();
       }
       this.dontAnimate = true;
     }));
@@ -141,14 +137,14 @@ class ConnectivityWidgetState extends State<ConnectivityWidget>
   Widget build(BuildContext context) {
     Widget child = StreamBuilder(
         stream: ConnectivityBloc.instance.connectivityStatusStream,
-        builder: (context, snapshot) => Stack(
+        builder: (context, AsyncSnapshot<bool?> snapshot) => Stack(
               children: <Widget>[
-                widget.builder(context, snapshot.data ?? true),
-                if (widget.showOfflineBanner && !(snapshot.data ?? true))
+                widget.builder!(context, snapshot.data ?? true),
+                if (widget.showOfflineBanner! && !(snapshot.data ?? true))
                   Align(
                       alignment: Alignment.bottomCenter,
                       child: SlideTransition(
-                          position: animationController.drive(Tween<Offset>(
+                          position: animationController!.drive(Tween<Offset>(
                             begin: const Offset(0.0, 1.0),
                             end: Offset.zero,
                           ).chain(CurveTween(

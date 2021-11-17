@@ -9,14 +9,15 @@ import 'event.dart';
 /// the [ConnectivityUtils] if there is a connection to the internet
 class ConnectivityBloc {
   /// Connectivity status Stream
-  final connectivityStatusSubject = BehaviorSubject<bool>();
+  BehaviorSubject<bool> connectivityStatusSubject = BehaviorSubject<bool>();
 
   Sink<bool> get connectivityStatusSink => connectivityStatusSubject.sink;
 
   Stream<bool> get connectivityStatusStream => connectivityStatusSubject.stream;
 
   /// Check the network status
-  final _checkInternetConnectivitySubject = PublishSubject<Event>();
+  PublishSubject<Event> _checkInternetConnectivitySubject =
+      PublishSubject<Event>();
 
   Sink<Event> get checkInternetConnectivitySink =>
       _checkInternetConnectivitySubject.sink;
@@ -39,7 +40,7 @@ class ConnectivityBloc {
   }
 
   void dispose() {
-    _checkInternetConnectivitySubject?.close();
-    connectivityStatusSubject?.close();
+    _checkInternetConnectivitySubject.close();
+    connectivityStatusSubject.close();
   }
 }

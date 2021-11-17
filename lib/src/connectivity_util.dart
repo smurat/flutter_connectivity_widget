@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:connectivity/connectivity.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:rxdart/rxdart.dart';
 
 import 'package:http/http.dart' as http;
@@ -35,11 +36,11 @@ class ConnectivityUtils {
     _callback = callback;
   }
 
-  static ConnectivityUtils _instance;
+  static late ConnectivityUtils _instance;
 
   /// Initializes the ConnectivityUtils instance by giving it a [serverToPing] and [callback]
   static ConnectivityUtils initialize(
-      {List<String> serverToPing, VerifyResponseCallback callback}) {
+      {@required List<String>? serverToPing, VerifyResponseCallback? callback}) {
     _instance =
         ConnectivityUtils._(serverToPing: serverToPing, callback: callback);
     return _instance;
@@ -53,7 +54,7 @@ class ConnectivityUtils {
   }
 
   ConnectivityUtils._(
-      {List<String> serverToPing, VerifyResponseCallback callback}) {
+      {List<String>? serverToPing, VerifyResponseCallback? callback}) {
     this._serverToPing =
         serverToPing != null ? serverToPing : this._serverToPing;
     this._callback = callback != null ? callback : this._callback;
