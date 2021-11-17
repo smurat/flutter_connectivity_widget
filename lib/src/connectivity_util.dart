@@ -36,17 +36,18 @@ class ConnectivityUtils {
     _callback = callback;
   }
 
-  static late ConnectivityUtils _instance;
+  static ConnectivityUtils? _instance;
 
   /// Initializes the ConnectivityUtils instance by giving it a [serverToPing] and [callback]
-  static ConnectivityUtils initialize(
-      {@required List<String>? serverToPing, VerifyResponseCallback? callback}) {
+  static ConnectivityUtils? initialize(
+      {@required List<String>? serverToPing,
+      VerifyResponseCallback? callback}) {
     _instance =
         ConnectivityUtils._(serverToPing: serverToPing, callback: callback);
     return _instance;
   }
 
-  static ConnectivityUtils get instance {
+  static ConnectivityUtils? get instance {
     if (_instance == null) {
       _instance = ConnectivityUtils._();
     }

@@ -25,12 +25,12 @@ class ConnectivityBloc {
   ConnectivityBloc._() {
     /// Listens for the value from [ConnectivityUtils] and sends a new event
     /// to the [ConnectivityWidget]
-    ConnectivityUtils.instance.isPhoneConnectedStream.listen((value) {
-      if (value != null) connectivityStatusSink.add(value);
+    ConnectivityUtils.instance?.isPhoneConnectedStream.listen((value) {
+      connectivityStatusSink.add(value);
     });
 
     _checkInternetConnectivitySubject.stream.listen((_) =>
-        ConnectivityUtils.instance.getConnectivityStatusSink.add(Event()));
+        ConnectivityUtils.instance?.getConnectivityStatusSink.add(Event()));
   }
 
   static final ConnectivityBloc _instance = ConnectivityBloc._();
