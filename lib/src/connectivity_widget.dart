@@ -61,14 +61,14 @@ class ConnectivityWidget extends StatefulWidget {
   /// Example:
   ///
   /// `onlineCallback: () => _incrementCounter()`
-  final OnlineCallback onlineCallback;
+  final OnlineCallback? onlineCallback;
 
   /// Callback for when the device is offline
   ///
   /// Example:
   ///
   /// `onlineCallback: () => _decrementCounter()`
-  final OfflineCallback offlineCallback;
+  final OfflineCallback? offlineCallback;
 
   /// OfflineBanner to be shown at the bottom of the widget
   ///
@@ -80,8 +80,8 @@ class ConnectivityWidget extends StatefulWidget {
 
   ConnectivityWidget(
       {this.builder,
-      required this.onlineCallback,
-      required this.offlineCallback,
+      this.onlineCallback,
+      this.offlineCallback,
       this.showOfflineBanner = true,
       this.offlineBanner,
       Key? key})
@@ -124,10 +124,11 @@ class ConnectivityWidgetState extends State<ConnectivityWidget>
       }
       if (!status) {
         this.animationController?.forward();
-        widget.offlineCallback();
+        widget.offlineCallback!();
       } else {
         this.animationController?.reverse();
-        widget.onlineCallback();
+        widget.onlineCallback!();
+        ;
       }
       this.dontAnimate = true;
     }));
